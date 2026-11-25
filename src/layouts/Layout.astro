@@ -1,99 +1,37 @@
 ---
-import '@/styles/global.css';
-import { siteConfig, formatTitle, jsonLdScript } from '@/utils/seo';
-import { asset } from '@/utils/assets';
-import type { PageMeta, DesignSystem } from '@/types';
-import Header from '@/components/layout/Header.astro';
-import Footer from '@/components/layout/Footer.astro';
+import '../styles/global.css';
+import Header from '../components/layout/Header.astro';
 
 interface Props {
-  meta: PageMeta;
-  showHeader?: boolean;
-  showFooter?: boolean;
-  designSystem?: DesignSystem;
+  title?: string;
+  description?: string;
 }
 
-const { meta, showHeader = true, showFooter = true, designSystem = 'kinetic-slate' } = Astro.props;
-
-const title = formatTitle(meta.title);
-const canonicalUrl = meta.canonical ?? new URL(Astro.url.pathname, siteConfig.url).toString();
-const ogImage = new URL(meta.image ?? siteConfig.defaultImage, siteConfig.url).toString();
-
-const websiteJsonLd = jsonLdScript({
-  '@type': 'WebSite',
-  name: siteConfig.name,
-  url: siteConfig.url,
-  description: siteConfig.tagline,
-});
-
-const webPageJsonLd = jsonLdScript({
-  '@type': 'WebPage',
-  name: title,
-  description: meta.description,
-  url: canonicalUrl,
-});
-
-const fontFamilies: Record<DesignSystem, string> = {
-  'kinetic-slate': 'family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700',
-  'neon-surge': 'family=Anton&family=Sora:wght@400;500;600;700',
-  'editorial-warmth': 'family=Syne:wght@400;500;600;700&family=Manrope:wght@400;500;600;700',
-};
-
-const themeColors: Record<DesignSystem, string> = {
-  'kinetic-slate': '#4f46e5',
-  'neon-surge': '#0a0a0a',
-  'editorial-warmth': '#c2410c',
-};
-
-const googleFontUrl = `https://fonts.googleapis.com/css2?${fontFamilies[designSystem]}&display=swap`;
-const faviconUrl = asset('favicon.svg');
-const sitemapUrl = asset('sitemap-index.xml');
+const {
+  title = 'GenzPlus | Launching soon',
+  description = 'A new space for learning and technology. GenzPlus is launching soon.',
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth" data-theme={designSystem}>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={meta.description} />
-    <meta name="theme-color" content={themeColors[designSystem]} />
-
-    {meta.noindex && <meta name="robots" content="noindex, nofollow" />}
-
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0a0a0a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href={googleFontUrl} />
-
-    <link rel="canonical" href={canonicalUrl} />
-    <link rel="icon" type="image/svg+xml" href={faviconUrl} />
-    <link rel="sitemap" href={sitemapUrl} />
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;500&display=swap" />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={meta.description} />
-    <meta property="og:type" content={meta.type ?? 'website'} />
-    <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:image:alt" content={meta.imageAlt ?? title} />
-    <meta property="og:site_name" content={siteConfig.name} />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content={siteConfig.twitterHandle} />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={meta.description} />
-    <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:image:alt" content={meta.imageAlt ?? title} />
-
-    <script is:inline type="application/ld+json" set:html={websiteJsonLd} />
-    <script is:inline type="application/ld+json" set:html={webPageJsonLd} />
-
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="GenzPlus" />
     <title>{title}</title>
   </head>
-  <body class="min-h-screen flex flex-col bg-background text-foreground antialiased">
-    {showHeader && <Header />}
-    <main id="main-content" class="flex-1">
-      <slot />
-    </main>
-    {showFooter && <Footer />}
+  <body>
+    <Header />
+    <main><slot /></main>
   </body>
 </html>

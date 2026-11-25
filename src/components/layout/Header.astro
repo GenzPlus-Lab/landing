@@ -1,19 +1,44 @@
 ---
 import Container from './Container.astro';
-import { route } from '@/utils/routes';
 ---
 
-<header class="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+<header class="sticky top-0 z-50 border-b border-white/10 bg-[#0a0a0a]/80 backdrop-blur-md">
   <Container class="flex h-16 items-center justify-between">
-    <a href={route('/')} class="text-lg font-bold tracking-tight" aria-label="Astro Landing Kit home">
-      Astro Landing Kit
+    <a
+      href="/"
+      class="inline-flex items-center gap-3 rounded-sm text-lg font-medium tracking-tight text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+      aria-label="GenzPlus home"
+    >
+      <span>Genz<span class="text-primary">Plus</span></span>
     </a>
-
-    <nav aria-label="Main navigation">
-      <ul class="flex items-center gap-6 text-sm font-medium">
-        <li><a href={route('/')} class="text-muted-foreground hover:text-foreground transition-colors">Templates</a></li>
-        <li><a href="https://github.com/loSpaccaBit/astro-landing-kit" class="text-muted-foreground hover:text-foreground transition-colors">GitHub</a></li>
-      </ul>
-    </nav>
+    <div class="text-right" data-header-clock hidden>
+      <time class="font-mono text-sm tracking-wider text-primary tabular-nums" aria-live="off"></time>
+    </div>
   </Container>
 </header>
+
+<script>
+  const clock = document.querySelector<HTMLElement>('[data-header-clock]');
+  const time = clock?.querySelector('time');
+  const formatter = new Intl.DateTimeFormat('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h12',
+  });
+
+  if (clock && time) {
+    const updateClock = () => {
+      const now = new Date();
+      time.textContent = formatter.formatToParts(now)
+        .filter(({ type }) => ['hour', 'minute', 'second'].includes(type))
+        .map(({ value }) => value)
+        .join(':');
+      time.dateTime = now.toISOString();
+    };
+
+    updateClock();
+    clock.hidden = false;
+    window.setInterval(updateClock, 1000);
+  }
+</script>
