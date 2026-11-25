@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Worker name. Also the subdomain: <name>.<account>.workers.dev
+  "name": "genzplus-landing",
+  "compatibility_date": "2026-11-25",
+  // Fully static site: no Worker script, Cloudflare serves dist/ directly.
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
