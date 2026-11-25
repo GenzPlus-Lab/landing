@@ -1,8 +1,17 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  // Worker name. Also the subdomain: <name>.<account>.workers.dev
-  "name": "genzplus-landing",
+  // Must match the Worker name in the Cloudflare dashboard.
+  "name": "landing",
+  // GenzPlus account. Pinned so a login with several accounts can't deploy elsewhere.
+  "account_id": "79ad0226ac9935b2fd03d1679fb116b4",
   "compatibility_date": "2026-11-25",
+  "workers_dev": true,
+  "preview_urls": true,
+  // Deploying creates the DNS records for these domains.
+  "routes": [
+    { "pattern": "genzplustech.com", "custom_domain": true },
+    { "pattern": "www.genzplustech.com", "custom_domain": true }
+  ],
   // Fully static site: no Worker script, Cloudflare serves dist/ directly.
   "assets": {
     "directory": "./dist",

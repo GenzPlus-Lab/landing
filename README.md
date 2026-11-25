@@ -31,12 +31,9 @@ bun run cf:preview    # build and serve locally with the Workers runtime
 bun run cf:deploy     # build and deploy
 ```
 
-To deploy on every push, import the repository in the Cloudflare dashboard under Workers & Pages and use:
+Pushing to `main` deploys automatically. The `landing` Worker is connected to this repository in the Cloudflare dashboard with build command `bun run build` and deploy command `npx wrangler deploy`.
 
-- Build command: `bun run build`
-- Deploy command: `bunx wrangler deploy`
-
-The Worker name in the dashboard must match `name` in `wrangler.jsonc`.
+The site is served on `genzplustech.com` and `www.genzplustech.com`, set under `routes` in `wrangler.jsonc`. Do not use `cf deploy`: it ignores `wrangler.jsonc` and rewrites project files.
 
 The site URL defaults to `https://genzplustech.com/`. Set `PUBLIC_SITE_URL` at build time to override it.
 
